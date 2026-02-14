@@ -27,6 +27,7 @@ This repository is for newcomers who want to:
 - `docs/08-verl-training-preparation-vi.md`: Vietnamese guide on required files for `verl` RL training and AgentFlow adaptation
 - `docs/09-four-subagents-runtime-analysis-vi.md`: Vietnamese deep analysis of 4 specialized sub-agents, runtime flow, and comparisons with ReAct/CodeAct/Planner-Worker
 - `docs/10-subagent-tuning-analysis-vi.md`: Vietnamese deep analysis of sub-agent tuning strategy, data format, and pseudocode for `verl` training
+- `docs/advanced-planner-tuning/README-vi.md`: Advanced Vietnamese tutorial series (PhD/AI Research focus) for planner tuning with fixed worker/verifier/generator
 
 ## Original repository analyzed
 - Source: https://github.com/lupantech/AgentFlow
