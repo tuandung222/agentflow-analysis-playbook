@@ -28,6 +28,7 @@ This repository is for newcomers who want to:
 - `docs/09-four-subagents-runtime-analysis-vi.md`: Vietnamese deep analysis of 4 specialized sub-agents, runtime flow, and comparisons with ReAct/CodeAct/Planner-Worker
 - `docs/10-subagent-tuning-analysis-vi.md`: Vietnamese deep analysis of sub-agent tuning strategy, data format, and pseudocode for `verl` training
 - `docs/advanced-planner-tuning/README-vi.md`: Advanced Vietnamese tutorial series (PhD/AI Research focus) for planner tuning with fixed worker/verifier/generator
+- `docs/researcher-practical-series/README-vi.md`: Practical deep-dive series (with Jupyter labs) on hacking planner, worker/verifier/generator, orchestration rebuild, and planner finetune evaluation
 
 ## Original repository analyzed
 - Source: https://github.com/lupantech/AgentFlow
