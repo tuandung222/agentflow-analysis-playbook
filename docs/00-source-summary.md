@@ -1,18 +1,18 @@
 # Source Summary (AgentFlow)
 
-## Paper & project context
+## Paper and project context
 - Project: AgentFlow - In-the-Flow Agentic System Optimization
-- Claim chính: tối ưu planner trong hệ multi-agent/tool workflow bằng Flow-GRPO
-- News trong README gốc: accepted ICLR 2026 (2026-01-26)
+- Core claim: optimize the planner inside a multi-agent/tool workflow with Flow-GRPO
+- The upstream README news section reports ICLR 2026 acceptance (2026-01-26)
 
-## Top-level structure (repo gốc)
+## Top-level structure (upstream repo)
 - `agentflow/agentflow/`: core inference stack
 - `train/`: rollout script, training launch scripts, config YAML
-- `agentflow/verl/`: bridge sang RL trainer (`verl`) + Ray
-- `data/`: script chuẩn bị train/val parquet
-- `quick_start.py`: demo inference end-to-end
+- `agentflow/verl/`: bridge to RL trainer (`verl`) + Ray
+- `data/`: scripts to prepare train/validation parquet files
+- `quick_start.py`: end-to-end inference demo
 
-## Thành phần quan trọng
+## Critical components
 - Inference orchestration:
   - `agentflow/agentflow/solver.py`
   - `agentflow/agentflow/models/planner.py`
@@ -27,9 +27,9 @@
   - `agentflow/verl/trainer.py`
 
 ## Key design idea
-- Thay vì train single model làm mọi thứ, AgentFlow phân module:
-  1. Planner: phân tích query + chọn tool bước kế
-  2. Executor: sinh command + thực thi tool
-  3. Verifier: quyết định STOP/CONTINUE
-  4. Generator: tổng hợp final/direct answer
-- Training nhắm vào model “trainable” cho planner chính (và có thể cấu hình thêm), trong khi các thành phần khác có thể giữ fixed model.
+- Instead of training one model to do everything, AgentFlow splits responsibilities:
+  1. Planner: query analysis + next-tool selection
+  2. Executor: command generation + tool execution
+  3. Verifier: STOP/CONTINUE decision
+  4. Generator: final/direct response synthesis
+- Training primarily targets the “trainable” model in the planner path, while other components can remain fixed.

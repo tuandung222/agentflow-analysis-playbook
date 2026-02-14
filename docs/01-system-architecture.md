@@ -1,37 +1,37 @@
 # System Architecture
 
 ## End-to-end inference loop
-Trong `solver.solve()`:
+In `solver.solve()`:
 1. `planner.analyze_query()`
-2. Loop theo step (`max_steps`, `max_time`):
+2. Step loop (`max_steps`, `max_time`):
    - `planner.generate_next_step()` -> context + sub_goal + tool
    - `executor.generate_tool_command()`
    - `executor.execute_tool_command()`
    - `memory.add_action()`
    - `verifier.verificate_context()` -> STOP/CONTINUE
-3. Kết thúc loop:
+3. Loop termination:
    - `planner.generate_final_output()` (detailed)
-   - `planner.generate_direct_output()` (concise answer)
+   - `planner.generate_direct_output()` (concise)
 
-## Vai trò từng module
+## Module responsibilities
 - Planner:
-  - Dùng LLM để phân tích mục tiêu và chọn tool theo từng bước
-  - Có tách `llm_engine` và `llm_engine_fixed` để ổn định một số bước
+  - Uses LLM(s) to analyze goals and choose tools step by step
+  - Separates `llm_engine` and `llm_engine_fixed` for controlled behavior
 - Executor:
-  - Convert sub-goal thành code gọi `tool.execute(...)`
-  - Parse command, chạy có timeout, lưu execution result
+  - Converts sub-goals into executable `tool.execute(...)` code
+  - Parses generated commands, executes with timeout, stores outputs
 - Verifier:
-  - Đánh giá memory đã đủ trả lời chưa
-  - Output signal STOP/CONTINUE
+  - Checks whether memory is sufficient to answer the query
+  - Returns STOP/CONTINUE control signal
 - Memory:
-  - Lưu action history (tool, sub-goal, command, result)
+  - Stores action history (tool, sub-goal, command, result)
 
-## Tooling subsystem
-- `Initializer` quét `tools/**/tool.py`, nạp metadata + cache instance tool
-- Có mapping short/long tool name để tăng độ robust khi planner output tên tool
-- Có hỗ trợ parallel loading tool để giảm startup latency
+## Tool subsystem
+- `Initializer` scans `tools/**/tool.py`, loads metadata, and caches tool instances
+- Includes short/long tool-name mapping for robust resolution
+- Supports parallel tool loading to reduce startup latency
 
-## Lưu ý kỹ thuật
-- Nhiều bước dùng prompt-template cứng trong code => behavior rất phụ thuộc prompt quality
-- `exec` command sinh từ LLM trong Executor -> linh hoạt cao, nhưng rủi ro runtime/safety cao
-- Cần quản lý timeout và sandbox tool chặt hơn nếu production hóa
+## Practical technical notes
+- Prompt templates in code strongly affect behavior quality
+- Executor uses generated code execution (`exec`) for flexibility, but this raises runtime/safety risks
+- Production usage should harden timeout, sandboxing, and command validation

@@ -1,26 +1,26 @@
 # Concepts Primer
 
-## RL cho LLM (ngắn gọn)
-- SFT: dạy model bắt chước dữ liệu mẫu
-- RL phase: tối ưu policy theo reward mục tiêu
-- PPO/GRPO family: cập nhật policy có ràng buộc để không lệch quá xa
+## RL for LLMs (short version)
+- SFT: teaches imitation from supervised examples
+- RL stage: optimizes policy toward target rewards
+- PPO/GRPO family: updates policy with constraints to limit destructive drift
 
-## Vì sao AgentFlow khác kiểu single-model tool use
-- Single-model: một LLM vừa nghĩ vừa gọi tool => context dài, khó ổn định
-- AgentFlow: tách module chuyên trách => dễ kiểm soát, dễ thay thế từng phần
+## Why AgentFlow differs from single-model tool use
+- Single-model approach: one LLM reasons + calls tools in one long context
+- AgentFlow approach: separates modules with explicit responsibilities, improving control and modularity
 
 ## Planner / Executor / Verifier pattern
-- Planner: chọn hành động
-- Executor: biến action thành tương tác công cụ
-- Verifier: kiểm tra đã đủ bằng chứng chưa
-- Pattern này gần với control loop trong systems engineering
+- Planner: chooses next action
+- Executor: translates action into tool interaction
+- Verifier: checks if evidence is sufficient to stop
+- This mirrors a systems-control feedback loop
 
-## Reward trong bài toán orchestration
-- Reward không chỉ phụ thuộc answer cuối
-- Chất lượng trajectory (tool chọn đúng, ít bước thừa, kết quả nhất quán) rất quan trọng
-- Sparse reward (0/1) dễ gây variance cao; practical system thường cần shaping hoặc proxy metrics
+## Reward design in orchestration tasks
+- Final-answer correctness is not enough
+- Trajectory quality matters (tool choice, efficiency, consistency)
+- Sparse rewards (0/1) often cause high variance; practical systems may need shaping/proxy metrics
 
-## Độ khó cốt lõi
-- Credit assignment qua chuỗi bước dài
-- Tool nondeterminism (web/API đổi theo thời điểm)
-- Latency & cost khi training online với tool thật
+## Core difficulty in this domain
+- Long-horizon credit assignment
+- Tool/API non-determinism
+- Online training latency and cost

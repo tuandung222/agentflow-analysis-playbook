@@ -5,46 +5,46 @@
 - Config: `train/config.yaml`
 - Rollout worker: `train/rollout.py`
 - PPO core: `agentflow/verl/entrypoint.py` + `agentflow/verl/trainer.py`
-- Backend RL framework: `verl` + Ray + vLLM
+- RL backend: `verl` + Ray + vLLM
 
-## Dataflow tổng quát
-1. Parse YAML + export env vars (`train/train_agent.py`)
+## High-level dataflow
+1. Parse YAML and export env vars (`train/train_agent.py`)
 2. Run `python -m agentflow.verl ...`
-3. Trong `entrypoint.py`:
-   - init Ray
+3. In `entrypoint.py`:
+   - initialize Ray
    - load tokenizer/processor
-   - tạo worker group Actor/Critic/(Ref/RewardModel)
-4. `AgentFlowTrainer` gọi `AgentModeDaemon` để:
-   - gửi batch task tới AgentFlow server
-   - thu rollout triplets
-   - biến về batch token-level cho PPO update
+   - construct Actor/Critic/(Ref/RewardModel) workers
+4. `AgentFlowTrainer` + `AgentModeDaemon`:
+   - dispatch task batches to AgentFlow server
+   - collect rollout triplets
+   - convert rollouts to token-level PPO training batches
 5. PPO step:
    - old_log_prob
-   - ref_log_prob (nếu dùng KL)
-   - value (critic)
-   - advantage (`grpo` theo config)
+   - ref_log_prob (if KL is enabled)
+   - critic values
+   - advantage (`grpo` per config)
    - actor/critic optimization
 
-## Vai trò của `train/rollout.py`
-- Bọc solver thành agent rollout cho train/validation
-- Với mỗi task:
-  - append format yêu cầu `<answer>...</answer>`
-  - chạy solver
-  - extract answer
-  - chấm reward (đang dùng LLM judge qua `compute_score`)
-  - lưu JSON rollout artifact
-- Dùng `FileLock` để sync step folder giữa nhiều worker async
+## Role of `train/rollout.py`
+- Wraps solver execution into train/validation rollouts
+- Per task:
+  - appends `<answer>...</answer>` output-format constraint
+  - runs solver
+  - extracts answer
+  - computes reward (currently via LLM-based judge)
+  - writes rollout JSON artifacts
+- Uses `FileLock` to synchronize step folder assignment across async workers
 
-## Những điểm cần hiểu rõ cho người mới
-- “Flow-GRPO” ở repo được hiện thực qua cấu hình `algorithm.adv_estimator: grpo` và hạ tầng PPO của `verl`
-- Rollout quality phụ thuộc mạnh vào:
-  - tool set + tool engine
-  - model_engine split (trainable vs fixed)
+## Important beginner takeaways
+- “Flow-GRPO” in this repo is expressed through `algorithm.adv_estimator: grpo` and `verl` PPO internals
+- Rollout quality is highly sensitive to:
+  - enabled tools + tool engines
+  - model split (trainable vs fixed engines)
   - timeout, max steps, max response length
-- Reward hiện tại là sparse binary (0/1) theo judge => variance cao, cần nhiều rollout/ổn định hạ tầng
+- Reward is sparse binary (0/1), which can increase variance and instability
 
-## Bottlenecks thường gặp
-- OOM do `max_prompt_length` lớn + vLLM memory utilization cao
-- Deadlock/lag do Ray cluster hoặc async queue overload
-- Reward noise khi judge không ổn định (prompt judge chưa đủ chặt)
-- Cost API cao nếu dùng model thương mại cho judge/tool/planner fixed
+## Common bottlenecks
+- OOM from large `max_prompt_length` and aggressive vLLM memory settings
+- Ray cluster instability or async queue overload
+- Reward noise from judge inconsistency
+- High API cost if fixed components and judge use commercial models

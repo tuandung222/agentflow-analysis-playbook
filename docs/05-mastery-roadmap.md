@@ -1,29 +1,29 @@
-# Mastery Roadmap (2-4 tuần)
+# Mastery Roadmap (2-4 Weeks)
 
-## Tuần 1: Understand & Reproduce
-- Đọc `00`, `01`, `04`
-- Chạy `quick_start.py` và xác nhận tool/engine hoạt động
-- Trace 1 query từ planner đến verifier bằng log
+## Week 1: Understand and reproduce
+- Read `00`, `01`, and `04`
+- Run `quick_start.py` and verify tool/engine readiness
+- Trace one query from planner to verifier using logs
 
-## Tuần 2: Train Small
-- Giảm cấu hình train để chạy được 1 cycle ngắn
-- Phân tích rollout JSON:
-  - tool nào được chọn nhiều nhất
-  - tỉ lệ STOP sớm
-  - lỗi command execution
-- Tối ưu prompt planner/executor để giảm bước thừa
+## Week 2: Train small
+- Downscale config and run a short training cycle
+- Analyze rollout JSON for:
+  - frequent tool choices
+  - early STOP behavior
+  - command execution failures
+- Improve planner/executor prompts to reduce redundant steps
 
-## Tuần 3: Reward & Stability
-- Audit reward pipeline (judge consistency)
-- Thử thay judge prompt hoặc model judge
-- Theo dõi variance reward theo seed/batch
+## Week 3: Reward and stability
+- Audit reward pipeline and judge consistency
+- Experiment with judge prompt/model variants
+- Track reward variance across seeds and batches
 
-## Tuần 4: Extension
-- Thêm 1 tool domain-specific
-- Thêm 1 benchmark/task set mới
-- Viết báo cáo so sánh trước/sau (success rate, cost, latency)
+## Week 4: Extension
+- Add one domain-specific tool
+- Add one new benchmark/task set
+- Write before/after report (success rate, cost, latency)
 
-## Deliverables nên có
-- 1 dashboard log + metrics
-- 1 notebook/markdown phân tích lỗi chính
-- 1 patch cải thiện rõ ràng (prompt/tool/reward/config)
+## Suggested deliverables
+- One metrics/log dashboard
+- One markdown/notebook failure analysis report
+- One clear improvement patch (prompt/tool/reward/config)

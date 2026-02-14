@@ -1,32 +1,32 @@
 # Extension Guide
 
-## A) Thêm tool mới
-1. Tạo thư mục `agentflow/agentflow/tools/<tool_name>/`
-2. Implement class `...Tool` trong `tool.py` với metadata đầy đủ
-3. Bảo đảm có `TOOL_NAME` rõ ràng để Initializer map chính xác
-4. Test bằng script tool test trước khi gắn vào training
+## A) Add a new tool
+1. Create `agentflow/agentflow/tools/<tool_name>/`
+2. Implement a `...Tool` class in `tool.py` with complete metadata
+3. Define a clear `TOOL_NAME` so Initializer mapping works reliably
+4. Run tool-level tests before enabling in training
 
-## B) Thêm dataset mới
-1. Chuẩn hóa về định dạng parquet mà training loader đọc được
-2. Bổ sung trường `question`, `result`, `extra_info`
-3. Test data sanity trước (null, max length, duplicate)
+## B) Add a new dataset
+1. Normalize to parquet format expected by the training loader
+2. Include fields such as `question`, `result`, and `extra_info`
+3. Run sanity checks (nulls, length limits, duplicates)
 
-## C) Điều chỉnh reward
-- Hiện tại reward thiên về correct/incorrect
-- Hướng mở rộng:
-  - reward theo efficiency (ít bước hơn)
-  - reward theo tool reliability
-  - reward shaping theo intermediate goals
+## C) Improve reward design
+- Current setup is mostly correctness-based binary reward
+- Extension directions:
+  - efficiency reward (fewer steps)
+  - tool reliability reward
+  - intermediate-goal shaping reward
 
-## D) Tune cấu hình train
-- File chính: `train/config.yaml`
-- Nhóm tham số cần ưu tiên:
+## D) Tune training config
+- Main file: `train/config.yaml`
+- Parameter groups to prioritize:
   - throughput: `data.train_batch_size`, `rollout.n`
-  - stability: `lr`, `kl_loss_coef`, clip ratio
+  - stability: learning rate, `kl_loss_coef`, clip ratios
   - latency/memory: `max_prompt_length`, `max_response_length`, `gpu_memory_utilization`
 
-## E) Checklist production-minded
-- Timeout policy cho từng tool
-- Retry/backoff cho API errors
-- Guardrail cho generated command
-- Observability: trace per step + structured metrics
+## E) Production hardening checklist
+- Per-tool timeout policy
+- Retry/backoff for API failures
+- Guardrails for generated command execution
+- Step-level tracing + structured observability metrics
