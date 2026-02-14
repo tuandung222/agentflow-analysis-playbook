@@ -24,6 +24,9 @@ This repository is for newcomers who want to:
 - `docs/05-mastery-roadmap.md`: 2–4 week roadmap to master the codebase
 - `docs/06-extension-guide.md`: How to add tools, datasets, rewards, and benchmarks
 - `docs/07-code-deep-dive.md`: Code-path deep dive for inference and training internals
+- `docs/08-verl-training-preparation-vi.md`: Vietnamese guide on required files for `verl` RL training and AgentFlow adaptation
+- `docs/09-four-subagents-runtime-analysis-vi.md`: Vietnamese deep analysis of 4 specialized sub-agents, runtime flow, and comparisons with ReAct/CodeAct/Planner-Worker
+- `docs/10-subagent-tuning-analysis-vi.md`: Vietnamese deep analysis of sub-agent tuning strategy, data format, and pseudocode for `verl` training
 
 ## Original repository analyzed
 - Source: https://github.com/lupantech/AgentFlow
