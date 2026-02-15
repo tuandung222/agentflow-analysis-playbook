@@ -16,7 +16,7 @@ sequenceDiagram
     S->>P: analyze_query(query)
     P-->>S: query_analysis
 
-    loop step = 1..max_steps
+    loop Step loop (1..max_steps)
         S->>P: generate_next_step(query, query_analysis, memory)
         P-->>S: context, sub_goal, tool_name
 
@@ -32,14 +32,16 @@ sequenceDiagram
         S->>V: verificate_context(query, query_analysis, memory)
         V-->>S: STOP or CONTINUE
 
-        alt STOP
-            break
+        alt Verifier decides STOP
+            Note over S,V: Exit loop
+        else Verifier decides CONTINUE
+            Note over S,V: Continue to next step
         end
     end
 
     S->>P: generate_final_output / generate_direct_output
     P-->>S: final answer
-    S-->>U: answer + trace
+    S-->>U: answer and trace
 ```
 
 ## 2) State machine của orchestration
